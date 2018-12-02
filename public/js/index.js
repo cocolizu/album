@@ -1,0 +1,367 @@
+$(function(){
+    //当窗口发生变化时触发，窗口大于等于767px时，移除#show模块
+	$(window).resize(function(){
+		if($(window).width()>=767)
+			$('#menu').next().remove();
+    })
+    //点击菜单时，动态添加#show模块
+    $('#menu>span>i').click(function(){
+        $('#show')
+        .slideToggle()
+        //鼠标移入#show模块下的每个li时，添加样式
+        .on('mouseenter','li',function(){
+            var $li=$(this);
+            $li
+            .css({
+                'color':'white',
+                'background':$li.attr('data-c')
+            });
+        })
+        //鼠标离开#show模块下的每个li时，清除样式
+        .on('mouseleave','li',function(){
+            var $li=$(this);
+            if(!$li.attr('data-a')){
+                $li.css({
+                    'color':'black',
+                    'background':''
+                });
+            }     
+        })
+        //鼠标点击#show模块下的每个li时，添加样式，清除其他li的样式
+        .on('click','li',function(){
+            var $li=$(this);
+            $li
+            .attr('data-a','active')
+            .css({
+                'background':$li.attr('data-c'),
+                'color':'white'
+            })
+            .siblings()
+            .removeAttr('data-a')
+            .css({
+                'color':'black',
+                'background':''
+            })
+			if($li.html().trim()=='自然环境'){
+				$('div.back>audio').attr('src','video/see.mp3') 
+				$('div.back>video').attr('src','video/environment.mp4')
+				$('#section>p:nth-child(2)').html('走向自然，走向绿色的田野，享受它独特的风采。这里虽没有高山的险峻，却有厚野的辽阔;虽没有大海的汹涌，却有小溪的优雅，虽没有外界的热闹，却有你所期待的平静。')
+			}
+			else{
+				$('div.back>audio').attr('src','video/comic.mp3')
+				$('div.back>video').attr('src','video/comic2.mp4')
+				$('#section>p:nth-child(2)').html('漫画是一种艺术形式，是用简单而夸张的手法来描绘生活或时事的图画。一般运用变形、比拟、象征、暗示、影射的方法。构成幽默诙谐的画面或画面组，以取得讽刺或歌颂的效果。')
+			}
+        })
+        //为含有data-a属性的元素，添加样式
+        $('#show>ul>li:first-child')
+        .css({
+            'background':'#28B6E6',
+            'color':'white'
+        })
+    });
+    //移入/离开页面上的图片时，显示/隐藏边框
+    $('#con1>div:nth-child(5)').on('mouseenter','img,div.div-img',function(){ 
+        $(this).parent().css('overflow','hidden')  
+        if($(this).attr('src')){
+            $(this)
+            .css({
+                'opacity':'0.5',
+                'transform':'scale(1.1)'
+            })
+            .next()
+            .addClass('new')       
+            .children()
+            .last()
+            .css({
+                'opacity':'1',
+                'margin-top':'1rem'
+            })
+            .prev()
+            .css('margin-top','1.5rem')
+        }else{
+            $(this)
+            .addClass('new')
+            .children()
+            .last()
+            .css({
+                'opacity':'1',
+                'margin-top':'1rem'
+            })
+            .prev()
+            .css('margin-top','1.5rem')
+            .parent()
+            .prev()
+            .css({
+                'opacity':'0.5',
+                'transform':'scale(1.1)'
+            })
+        }           
+    })
+    $('#con1>div:nth-child(5)').on('mouseleave','img',function(){        
+        $(this)
+        .css({
+            'opacity':'0.8',
+            'transform':'scale(1)'
+        })
+        .next()
+        .removeClass('new')
+        .children()
+        .last()
+        .css({
+            'margin-top':'6rem',
+            'opacity':'0'
+        })   
+        .prev()
+        .css('margin-top','0')
+    })
+    //点击页面上的图片时，设置遮罩层，显示大图片
+    $('#con1>div:nth-child(5)').on('click','img,div.div-img',function(){
+		$('#bscreen').empty();
+        $("<div><span><i title='放大' class='fa fa-search-plus'></i><i title='缩小' class='fa fa-search-minus'></i><i title='按Esc退出' class='fa fa-close'></i><i title='向左旋转' class='fa fa-mail-reply'></i><i title='向右旋转' class='fa fa-mail-forward'></i></span><p></p><img title='下一张' src='img/tm-img-01.jpg' class='bscreen-img'><div class='move'></div></div><span><i class='fa fa-caret-left'></i></span><span><i class='fa fa-caret-right'></i></span>")
+		.appendTo($('#bscreen'));
+        //设置滚动条回到顶部并不可用
+        $('html,body')
+        .animate({'scrollTop':0},1000)
+        .css('overflow','hidden');
+        //获取图片序号
+        if($(this).attr('src')){
+            var src=$(this).attr('src').slice(0,-7)+'.jpg';
+            var n=$('#con1>div:nth-child(5)>div>div>div>img').index($(this));
+        }
+        else{
+            var src=$(this).prev().attr('src').slice(0,-7)+'.jpg';
+            var n=$('#con1>div:nth-child(5)>div>div>div>div').index($(this));
+        }
+        $('#bscreen')
+        .fadeIn()
+        .children()
+        .children('img')
+        .attr('src',src)  
+        //设置图片显示序号
+        $('#bscreen>div:first-child>p').html(`${n+1} of 16`);
+        //鼠标进入/离开时显示/隐藏图片信息
+        $('#bscreen>div').mouseenter(function(){
+            $(this).children('.move').children('h4,p').remove();
+            $(this)
+            .children()
+            .last()
+            .css('height','10rem')
+            $("<h4>Photos Album</h4><p>我喜欢大自然的风景，喜欢蔚蓝的天空和大海，喜欢那如梦似幻高山流水绝景意境画面，更喜欢海南椰岛那一排排高耸入云，挺拔秀丽四季常青的树木，在这一片绿色田园，大自然的独特风景中。</p>").appendTo($(this).children().last())
+        }).mouseleave(function(){
+            $(this)
+            .children()
+            .last()
+            .css('height','0')
+            .children('h4,p')
+            .remove()
+        })
+        //单击图片或者左右按钮，实现图片切换
+        $('#bscreen>div>img,#bscreen>span').click(function(e){
+            $obj=$(e.target);
+            n=parseInt($('#bscreen>div>img').attr('src').slice(11,-4));
+			var npr=$('#bscreen>div>img').attr('src').slice(0,11);
+            if($obj.hasClass('bscreen-img') || $obj.hasClass('fa-caret-right'))
+                n++;
+            else
+                n--;
+            if(n<1) n=16;
+            if(n>16) n=1;
+            $('#bscreen>div:first-child>p').html(`${n} of 16`);
+            if(n>=1&&n<10){
+                n=npr+'0'+n+'.jpg';
+            }else if(n>=10 && n<=16){
+                n=npr+n+'.jpg';
+            }
+            $('#bscreen>div>img').attr('src',n)
+        })
+        //点击X号或者按esc时，退出显示层,附加放大、缩小、旋转功能
+        var rota=0,sca=1;
+        $('#bscreen>div>span>i').click(function(){
+            if($(this).is(':nth-child(3)')){
+                $(this)
+                .parent()
+                .parent()
+                .parent()
+                .fadeOut()
+                $('html,body').css('overflow-y','auto');
+            }else if($(this).is(':first-child')){
+                if(sca<=0.9){
+                    sca+=0.1;
+                }else{
+                    return;
+                }
+                $('#bscreen>div:first-child>img').css('transform','scale('+sca+')')
+            }else if($(this).is(':nth-child(2)')){
+                if(sca>=0.5){
+                    sca-=0.1;
+                }else{
+                    return;
+                }
+                $('#bscreen>div:first-child>img').css('transform','scale('+sca+')')
+            }else if($(this).is(':nth-child(4)')){
+                rota-=90;
+                $('#bscreen>div:first-child>img').css('transform','rotate('+rota+'deg)');
+            }else if($(this).is(':nth-child(5)')){
+                rota+=90;
+                $('#bscreen>div:first-child>img').css('transform','rotate('+rota+'deg)');
+            }
+        })
+        $(window).keyup(function(e){
+            if(e.keyCode==27){
+                $('#bscreen>div>span>i').click()
+            }else{
+                return;
+            }   
+        })
+    })
+    //设置导航第一项为选中状态
+    $('#nav>li:first-child')
+    .css({
+        'background':'#16B5A3',
+        'color':'white'
+    })
+    //控制导航切换并实现沿Y轴旋转
+    var sero=0; 
+    $('#nav').on('click','li',function(){     
+        var $li=$(this);
+        $li.css({
+            'background':$li.attr('data-c'),
+            'color':'white'
+        })
+        .siblings()
+        .css({
+            'background':'',
+            'color':''
+        })
+        $('body').css('background',$li.attr('data-c'))
+        $('#con1>div:nth-child(5)>p:first-child').html($li.html())
+        sero+=360;
+        $('#con1>div:nth-child(5)').css('transform','rotateY('+sero+'deg)')
+        //控制音频切换
+        if($li.html().trim()=='自然环境'){
+            $('div.back>audio').attr('src','video/see.mp3') 
+            $('div.back>video').attr('src','video/environment.mp4')
+			$('#turn>ul>li').each(function(i,elem){
+				var url=i+1
+				$(elem).children().attr('src',`img/${url}.jpg`)
+			})
+			$('#section>p:nth-child(2)').html('走向自然，走向绿色的田野，享受它独特的风采。这里虽没有高山的险峻，却有厚野的辽阔;虽没有大海的汹涌，却有小溪的优雅，虽没有外界的热闹，却有你所期待的平静。')
+        }
+        /*else if($li.html().trim()=='中国古风'){
+            $('div.back>audio').attr('src','video/ancient.mp3')
+			$('div.back>video').attr('src','video/ancient.mp4')
+		}*/
+        else /*if($li.html().trim()=='动漫壁纸')*/{
+            $('div.back>audio').attr('src','video/comic.mp3')
+            $('div.back>video').attr('src','video/comic2.mp4')
+			$('#turn>ul>li').each(function(i,elem){
+				var url=i+1+$('#turn>ul>li').length
+				$(elem).children().attr('src',`img/${url}.jpg`)
+			})
+			$('#section>p:nth-child(2)').html('漫画是一种艺术形式，是用简单而夸张的手法来描绘生活或时事的图画。一般运用变形、比拟、象征、暗示、影射的方法。构成幽默诙谐的画面或画面组，以取得讽刺或歌颂的效果。')
+        }
+    }) 
+	//控制文字从左往右移入
+	$('#con1>div:nth-child(5)>p')
+	.css({
+		'left':'0',
+		'opacity':1
+	})
+	//控制图片从下往上移入
+	function imgToUp(){
+		$('#con1>div:nth-child(5)>div.row').css({
+			'top':0,
+			'opacity':1
+		})
+	}
+	function imgInit(){
+		$('#section>div.row>div>div').each(function(i,elem){
+			$(elem)
+			.removeClass(`start${i}`)
+			.css({
+				'background':'#9e5406',
+				'position':'relative',
+				'left':'0',
+				'top':'0'
+			})
+		})
+		$('.page,#footer').css('display','block')
+	}
+    //控制当滚动条移到一定位置时,图片回到原来位置
+    $(window).scroll(function(){
+		if($(document.body).width()>=1300){
+			if($('html,body').scrollTop()>=200){
+				imgToUp();
+			}
+			if($('html,body').scrollTop()>=450){
+				imgInit();
+			}
+		}else{
+			imgToUp();
+			if($('html,body').scrollTop()>=100){
+				imgInit();
+			}
+		}
+    }) 
+	/*$.ajax({
+		url:'http://127.0.0.1:3000/img/getImg',
+		type:'get',
+		dataType:'json',
+		success:function(res){
+			console.log(res)
+		}
+	})*/	
+});
+var start=new Vue({
+	el:'#section',
+	data:{
+		type:0,
+		result:[]
+	},
+	methods:{
+		change(i){
+			axios.get(
+				'http://127.0.0.1:3000/img/getImg',
+				{params:{type:i}}
+			).then(res=>{
+				this.result=res.data
+			})
+		}
+	},
+	mounted(){
+		axios.get(
+			'http://127.0.0.1:3000/img/getImg',
+			{params:{type:this.type}}
+		).then(res=>{
+			this.result=res.data
+		})
+	}
+})
+new Vue({
+	el:'#nav',
+	methods:{
+		change(i){
+			axios.get(
+				'http://127.0.0.1:3000/img/getImg',
+				{params:{type:i}}
+			).then(res=>{
+				start.result=res.data
+			})
+		}
+	}
+})
+new Vue({
+	el:'#show',
+	methods:{
+		change(i){
+			axios.get(
+				'http://127.0.0.1:3000/img/getImg',
+				{params:{type:i}}
+			).then(res=>{
+				start.result=res.data
+			})
+		}
+	}
+})
+

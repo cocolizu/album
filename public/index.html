@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>相册</title>
+	<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+	<script src='js/vue.js'></script>
+	<script src='js/axios.min.js'></script>
+</head>
+<body>
+	<div id='d-left'></div>
+	<div id='d-right'></div>
+    <div id="con1" class="container-fluid pl-0 pr-0">
+		<div class='back'>
+			<audio src="video/see.mp3" autoplay='autoplay' loop='loop' ></audio>
+			<video src="video/environment.mp4" autoplay='autoplay' loop='loop'></video>
+		</div>
+		<div id='bscreen'></div>
+        <div class="row header pl-0 pr-0 m-0">
+            <div class="col-sm-6 col-8 p-0 pl-3">
+                <img src="img/logo.png" >
+            </div>
+            <div  class="col-sm-6 col-4 p-0">
+                <ul id='nav' class="nav justify-content-start h-100">
+                    <li @click='change(0)' class="nav-item pt-4" data-c='#16B5A3'>
+						自然环境
+					</li>
+					<li @click='change(1)' class="nav-item pt-4" data-c='#28B6E6'>
+						动漫壁纸
+					</li>
+                    <li class="nav-item pt-4" data-c='#ED544C'>
+						中国古风
+					</li>
+                    <li class="nav-item pt-4" data-c='#EAA319'>
+						生活点滴
+					</li>
+                    <li class="nav-item pt-4" data-c='#447FCA'>
+						个人收藏
+					</li>
+                </ul>
+				<div id='menu' class="mr-4">
+					<span class='float-right mt-2 text-center text-muted'>
+						<i class='fa fa-align-justify'></i>
+					</span>
+					<div id='show' class='hide'>
+						<ul class='list-unstyled mb-0'>
+						<li class='pt-3 pb-3 pl-4 pr-4 text-center' data-a='active' data-c='#16B5A3' @click='change(0)'>自然环境</li>
+						<li class='pt-3 pb-3 pl-4 pr-4 text-center' data-c='#28B6E6' @click='change(1)'>动漫壁纸</li>
+						<li class='pt-3 pb-3 pl-4 pr-4 text-center' data-c='#ED544C' >中国古风</li>
+						<li class='pt-3 pb-3 pl-4 pr-4 text-center' data-c='#EAA319'>生活点滴</li>
+						<li class='pt-3 pb-3 pl-4 pr-4 text-center' data-c='#447FCA'>个人收藏</li> 
+						</ul>
+					</div>
+				</div>
+            </div>
+        </div>
+		<div id='turn'>
+			<ul>
+				<li class='o1'><img src="img/1.jpg" alt="1"></li>
+				<li class='o2'><img src="img/2.jpg" alt="1"></li>
+				<li class='o3'><img src="img/3.jpg" alt="1"></li>
+				<li class='o4'><img src="img/4.jpg" alt="1"></li>
+				<li class='o5'><img src="img/5.jpg" alt="1"></li>
+				<li class='o6'><img src="img/6.jpg" alt="1"></li>
+			</ul>
+			<div>
+				<i class='fa fa-angle-left'></i>
+			</div>
+			<div>
+				<i class='fa fa-angle-right'></i>
+			</div>
+		</div>
+        <div id="section" class="sec-pad pb-2">
+            <p class="pr-0 pt-3 pl-3 pb-3 m-0 p-title">自然环境</p>
+            <p class="pr-0 pt-0 pl-3 pb-4 m-0 p-desc">
+                走向自然，走向绿色的田野，享受它独特的风采。这里虽没有高山的险峻，却有厚野的辽阔;
+				虽没有大海的汹涌，却有小溪的优雅，虽没有外界的热闹，却有你所期待的平静。
+            </p>
+			<div class='row ml-0 mr-0'>
+				<div v-for='(res,i) in result.slice(0,4)' class='col-md-3 col-6 text-center mb-4'>
+					<div :class="`start${i}`">
+						<img :src="res.imgurl" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>{{res.title}}</h2>
+							<P>{{res.subtitle}}</P>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class='row ml-0 mr-0'>
+				<div v-for='(res,i) in result.slice(4,8)' class='col-md-3 col-6 text-center mb-4'>
+					<div :class="`start${i}`">
+						<img :src="res.imgurl" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>{{res.title}}</h2>
+							<P>{{res.subtitle}}</P>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class='row ml-0 mr-0'>
+				<div v-for='(res,i) in result.slice(8,12)' class='col-md-3 col-6 text-center mb-4'>
+					<div :class="`start${i}`">
+						<img :src="res.imgurl" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>{{res.title}}</h2>
+							<P>{{res.subtitle}}</P>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class='row ml-0 mr-0'>
+				<div v-for='(res,i) in result.slice(12,16)' class='col-md-3 col-6 text-center mb-4'>
+					<div :class="`start${i}`">
+						<img :src="res.imgurl" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>{{res.title}}</h2>
+							<P>{{res.subtitle}}</P>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<!--<div class='row ml-0 mr-0'>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start4">
+						<img src="img/tm-img-05-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center  mb-4'>
+					<div  class="start5">
+						<img src="img/tm-img-06-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center  mb-4'>
+					<div  class="start6">
+						<img src="img/tm-img-07-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start7">
+						<img src="img/tm-img-08-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='row ml-0 mr-0'>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start8">
+						<img src="img/tm-img-09-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start9">
+						<img src="img/tm-img-10-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start10">
+						<img src="img/tm-img-11-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start11">
+						<img src="img/tm-img-12-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='row ml-0 mr-0'>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start12">
+						<img src="img/tm-img-13-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start13">
+						<img src="img/tm-img-14-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start14">
+						<img src="img/tm-img-15-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+				<div class='col-md-3 col-6 text-center mb-4'>
+					<div  class="start15">
+						<img src="img/tm-img-16-tn.jpg" class='img-fluid'/>
+						<div class='div-img'>
+							<h2>IMAGE ONE</h2>
+							<P>走向自然，走向绿色的田野，享受独特风采。</P>
+						</div>
+					</div>
+				</div>
+			</div>-->
+			<div class="mb-2">
+				<ul class="nav d-flex justify-content-center">
+					<li class="nav-item page mr-2">
+						<a href="#" class="nav-link p-0 pt-2 page-w text-center text-muted">首页</a>
+					</li>
+					<li class="nav-item page mr-2">
+						<a href="#" class="nav-link p-0 pt-2 page-w text-center text-muted">上一页</a>
+					</li>
+					<li class="nav-item page mr-2">
+						<a href="#" class="nav-link p-0 pt-2 page-w2 text-center page-active">1</a>
+					</li>
+					<li class="nav-item page mr-2">
+						<a href="#" class="nav-link p-0 pt-2 page-w2 text-center">2</a>
+					</li>
+					<li class="nav-item page mr-2">
+						<a href="#" class="nav-link p-0 pt-2 page-w text-center">下一页</a>
+					</li>
+					<li class="nav-item page mr-2">
+						<a href="#" class="nav-link p-0 pt-2 page-w text-center">尾页</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="footer" class="footer pt-3 pb-3 text-center">
+			<span class="text-muted">
+				Copyright © 2018 Your Company - Design: Poverty makes the heart grow fonder
+			</span>
+		</div>
+    </div>
+	<!--<script src="js/jquery-1.11.3.js"></script>-->
+	<script src='js/jquery.min.js'></script>
+	<script src="js/index.js"></script>
+	<script src='js/carousel.js'></script>
+</body>
+</html>
